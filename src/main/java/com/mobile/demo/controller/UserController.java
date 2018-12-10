@@ -2,6 +2,7 @@ package com.mobile.demo.controller;
 
 import com.mobile.demo.dao.UserEntityRepository;
 import com.mobile.demo.model.UserEntity;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,11 +37,26 @@ public class UserController {
         return userEntityRepository.findUserEntityByUsername(username);
     }
 
+    @PostMapping("/user/name")
+    @ResponseBody
+    public UserEntity checkUserEmailAndPassword(@RequestBody UserEntity userEntity){
+        System.out.println("check incoming: " + userEntity.getPassword());
+        UserEntity userEntity1 = userEntityRepository.findUserEntityByUsername(userEntity.getUsername());
+        System.out.println("check existing:  " + userEntity1.getPassword());
+        if(userEntity1.getPassword().equals(userEntity.getPassword())){
+            return userEntity1;
+        }else{
+            return null;
+        }
+    }
+
     @PostMapping("/user")
     @ResponseBody
     public UserEntity addUser(@RequestBody UserEntity userEntity){
         userEntityRepository.save(userEntity);
-        return userEntityRepository.findUserEntityByUsername(userEntity.getUsername());
+        UserEntity userEntity1 = userEntityRepository.findUserEntityByUsername(userEntity.getUsername());
+        System.out.println(userEntity1.getPassword());
+        return userEntity1;
     }
 
     @DeleteMapping("/user/delete/{id}")
