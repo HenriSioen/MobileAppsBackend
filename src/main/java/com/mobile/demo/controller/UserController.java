@@ -40,9 +40,7 @@ public class UserController {
     @PostMapping("/user/name")
     @ResponseBody
     public UserEntity checkUserEmailAndPassword(@RequestBody UserEntity userEntity){
-        System.out.println("check incoming: " + userEntity.getPassword());
         UserEntity userEntity1 = userEntityRepository.findUserEntityByUsername(userEntity.getUsername());
-        System.out.println("check existing:  " + userEntity1.getPassword());
         if(userEntity1.getPassword().equals(userEntity.getPassword())){
             return userEntity1;
         }else{
@@ -55,7 +53,6 @@ public class UserController {
     public UserEntity addUser(@RequestBody UserEntity userEntity){
         userEntityRepository.save(userEntity);
         UserEntity userEntity1 = userEntityRepository.findUserEntityByUsername(userEntity.getUsername());
-        System.out.println(userEntity1.getPassword());
         return userEntity1;
     }
 
